@@ -1,10 +1,9 @@
-import os
-import datetime as dt
+import argparse
 
-from pmaw import PushshiftAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database.models import Comment, Base
+from webscraper.models import Comment, Base
+from webscraper.reddit_comment_web_scraper import RedditCommentWebScraper
 
 engine = create_engine("sqlite:///comment.db")
 Base.metadata.bind = engine
@@ -12,30 +11,37 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-subreddit = "Liberal"  # os.environ["SUBREDDIT"]
-limit = 250_000  # int(os.environ["LIMIT"])
 
-api = PushshiftAPI()
+def main(subreddit, limit):
+    subreddit = subreddit
+    limit = limit
+    start_epoch = (2015, 1, 1)
 
-start_epoch = int(dt.datetime(2015, 1, 1).timestamp())
+    comment_scraper = RedditCommentWebScraper(subreddit, limit, start_epoch)
+    comment_scraper.scrape()
 
-results = list(
-    api.search_comments(
-        after=start_epoch,
-        subreddit=subreddit,
-        filter=["subreddit", "body", "created_utc"],
-        limit=limit,
-        mem_safe=True,
-        nest_level=3,
+    for comment in comment_scraper.get_comments():
+        new_comment = Comment(
+            created_utc=int(comment["created_utc"]),
+            subreddit=comment["subreddit"],
+            body=comment["body"],
+        )
+        session.add(new_comment)
+
+    session.commit()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--subreddit", metavar="path", required=True, help="the subreddit to scrape"
     )
-)
-
-for comment in results:
-    new_comment = Comment(
-        created_utc=int(comment["created_utc"]),
-        subreddit=comment["subreddit"],
-        body=comment["body"],
+    parser.add_argument(
+        "--limit",
+        metavar="path",
+        required=True,
+        help="the upper bound on comments to scrape",
     )
-    session.add(new_comment)
+    args = parser.parse_args()
 
-session.commit()
+    main(subreddit=args.subreddit, limit=args.limit)

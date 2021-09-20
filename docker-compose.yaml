@@ -1,9 +1,0 @@
-version: "3.3"
-
-services:
-
-  webscraper:
-    build: ./webscraper
-    environment:
-      - SUBREDDIT="Communism"
-      - LIMIT=100
