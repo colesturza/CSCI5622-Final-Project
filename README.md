@@ -7,11 +7,12 @@ A machine learning model to predict the subreddit of users' comments.
 
 - [PSAW: Python Pushshift.io API Wrapper (for comment/submission search)](https://psaw.readthedocs.io/en/latest/)
 
-## Running the Webscraper
-The webscraper is run within a Docker container on a vagrant VM. You will need to isntall Vagrant, plus VirtualBox. The following commands will get it up and running. It is also possible to run the docker compose command without the Vagrant VM.
+## Running the Web Scraper
 
-``$ vagrant up``
+The web scraper can be run with the following command. The `--subreddit` flag can be changed to and 
+subreddit of your choosing. The `--limit` flag is a limit on the number of comments to 
+scrape. A SQLite database will be generated with the scraped comments.
 
-``$ vagrant ssh default``
-
-``$ docker-compose up``
+```bash
+$ python ./webscraper/main.py --subreddit Communism --limit 100
+```

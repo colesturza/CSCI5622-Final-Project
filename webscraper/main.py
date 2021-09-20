@@ -2,10 +2,10 @@ import argparse
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from webscraper.models import Comment, Base
-from webscraper.reddit_comment_web_scraper import RedditCommentWebScraper
+from models import Comment, Base
+from reddit_comment_web_scraper import RedditCommentWebScraper
 
-engine = create_engine("sqlite:///comment.db")
+engine = create_engine("sqlite:///data/database/comment.db")
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -15,7 +15,7 @@ session = DBSession()
 def main(subreddit, limit):
     subreddit = subreddit
     limit = limit
-    start_epoch = (2015, 1, 1)
+    start_epoch = (2007, 1, 1)
 
     comment_scraper = RedditCommentWebScraper(subreddit, limit, start_epoch)
     comment_scraper.scrape()
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    main(subreddit=args.subreddit, limit=args.limit)
+    main(subreddit=args.subreddit, limit=int(args.limit))
