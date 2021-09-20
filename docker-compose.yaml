@@ -2,10 +2,8 @@ version: "3.3"
 
 services:
 
-  server_app:
+  webscraper:
     build: ./webscraper
-    volumes:
-      - ./webscraper:/opt/webscraper/src
     environment:
       - SUBREDDIT="Communism"
       - LIMIT=100

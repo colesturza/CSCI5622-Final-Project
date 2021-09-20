@@ -6,14 +6,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.models import Comment, Base
 
-engine = create_engine("sqlite:///database/comment.db")
+engine = create_engine("sqlite:///comment.db")
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-subreddit = os.environ["SUBREDDIT"]
-limit = os.environ["LIMIT"]
+subreddit = "Liberal"  # os.environ["SUBREDDIT"]
+limit = 250_000  # int(os.environ["LIMIT"])
 
 api = PushshiftAPI()
 
@@ -23,7 +23,7 @@ results = list(
     api.search_comments(
         after=start_epoch,
         subreddit=subreddit,
-        filter=["subreddit", "body", "author_created_utc"],
+        filter=["subreddit", "body", "created_utc"],
         limit=limit,
         mem_safe=True,
         nest_level=3,
@@ -32,7 +32,7 @@ results = list(
 
 for comment in results:
     new_comment = Comment(
-        created_utc=comment["author_created_utc"],
+        created_utc=int(comment["created_utc"]),
         subreddit=comment["subreddit"],
         body=comment["body"],
     )

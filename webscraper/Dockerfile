@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 
 COPY . /webscraper/
 
-CMD ["python", "src/python/main.py"]
+CMD ["python", "main.py"]
