@@ -20,7 +20,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision :docker_compose
 
   config.vm.provision "file", source: "./docker-compose.yaml", destination: "$HOME/docker-compose.yaml"
-  config.vm.provision "file", source: "./Dockerfile", destination: "$HOME/Dockerfile"
-  config.vm.provision "file", source: "./requirements.txt", destination: "$HOME/requirements.txt"
-  config.vm.provision "file", source: "./src", destination: "$HOME/src"
+  config.vm.provision "file", source: "./webscraper", destination: "$HOME/webscraper"
 end

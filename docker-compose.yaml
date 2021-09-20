@@ -3,8 +3,9 @@ version: "3.3"
 services:
 
   server_app:
-    build: ./server_app
+    build: ./webscraper
     volumes:
-      - ./server_app:/opt/server_app/src
+      - ./webscraper:/opt/webscraper/src
     environment:
-      - ENDPOINT_MESSAGE="A very interesting message.\n"
+      - SUBREDDIT="Communism"
+      - LIMIT=100
