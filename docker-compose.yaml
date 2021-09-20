@@ -1,0 +1,10 @@
+version: "3.3"
+
+services:
+
+  server_app:
+    build: ./server_app
+    volumes:
+      - ./server_app:/opt/server_app/src
+    environment:
+      - ENDPOINT_MESSAGE="A very interesting message.\n"
