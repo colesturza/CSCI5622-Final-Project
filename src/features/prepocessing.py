@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database.models import Base, Comment
+from src.data.models import Base, Comment
 
-engine = create_engine("sqlite:///data/database/comment.db")
+engine = create_engine("sqlite:///data/raw/comment.db")
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
