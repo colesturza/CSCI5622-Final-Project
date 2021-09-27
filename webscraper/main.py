@@ -2,7 +2,7 @@ import argparse
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Comment, Base
+from database.models import Comment, Base
 from reddit_comment_web_scraper import RedditCommentWebScraper
 
 engine = create_engine("sqlite:///data/database/comment.db")

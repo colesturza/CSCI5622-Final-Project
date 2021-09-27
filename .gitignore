@@ -560,3 +560,5 @@ cython_debug/
 *.box
 
 # End of https://www.toptal.com/developers/gitignore/api/latex,python,vagrant,jetbrains+all,jupyternotebooks,database
+
+cache/
