@@ -63,7 +63,7 @@ Project Organization
     │   ├── visualization  <- Scripts to create exploratory and results oriented visualizations
     │   │   └── visualize.py
     │   │
-    │   └── webscraper  <- Scripts to scrape data from Reddit
+    │   └── webscraper     <- Scripts to scrape data from Reddit
     │       ├── main.py
     │       └── reddit_comment_web_scraper.py
     │
