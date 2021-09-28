@@ -13,4 +13,3 @@ session = DBSession()
 for comment in Comment.query().all():
 
     pass
-
