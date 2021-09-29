@@ -12,10 +12,10 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-def main(subreddit, limit):
+def main(subreddit, limit, epoch="2007-1-1"):
     subreddit = subreddit
     limit = limit
-    start_epoch = (2007, 1, 1)
+    start_epoch = tuple(epoch.split("-")[:])
 
     comment_scraper = RedditCommentWebScraper(subreddit, limit, start_epoch)
     comment_scraper.scrape()
@@ -41,6 +41,12 @@ if __name__ == "__main__":
         metavar="path",
         required=True,
         help="the upper bound on comments to scrape",
+    )
+    parser.add_argument(
+        "--epoch",
+        metavar="path",
+        required=False,
+        help="the date to start collecting comments from",
     )
     args = parser.parse_args()
 
