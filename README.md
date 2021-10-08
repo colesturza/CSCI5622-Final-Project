@@ -14,7 +14,7 @@ subreddit of your choosing. The `--limit` flag is a limit on the number of comme
 scrape. A SQLite database will be generated with the scraped comments.
 
 ```bash
-$ python ./src/webscraper/main.py --subreddit Communism --limit 100
+$ python ./src/webscraper/scrape_dataset.py --subreddit Communism --limit 100
 ```
 
 Project Organization

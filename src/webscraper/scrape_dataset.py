@@ -17,14 +17,17 @@ def main(subreddit, limit):
     limit = limit
     start_epoch = (2007, 1, 1)
 
-    comment_scraper = RedditCommentWebScraper(subreddit, limit, start_epoch)
+    comment_scraper = RedditCommentWebScraper(
+        subreddit, limit, start_epoch
+    )
     comment_scraper.scrape()
 
     for comment in comment_scraper.get_comments():
         new_comment = Comment(
             created_utc=int(comment["created_utc"]),
-            subreddit=comment["subreddit"],
-            body=comment["body"],
+            subreddit=str(comment["subreddit"]),
+            body=str(comment["body"]),
+            score=int(comment["score"])
         )
         session.add(new_comment)
 
@@ -34,9 +37,14 @@ def main(subreddit, limit):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--subreddit", metavar="path", required=True, help="the subreddit to scrape"
+        "-s",
+        "--subreddit",
+        metavar="path",
+        required=True,
+        help="the subreddit to scrape",
     )
     parser.add_argument(
+        "-l",
         "--limit",
         metavar="path",
         required=True,

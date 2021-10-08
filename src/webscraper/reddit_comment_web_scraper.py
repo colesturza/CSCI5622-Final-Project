@@ -1,7 +1,13 @@
+import os
 import datetime as dt
 
-from pmaw import PushshiftAPI
 from typing import Tuple
+
+
+import praw
+
+from pmaw import PushshiftAPI
+from dotenv import load_dotenv, find_dotenv
 
 
 class RedditCommentWebScraper:
@@ -9,7 +15,7 @@ class RedditCommentWebScraper:
         self,
         subreddit: str = "politics",
         limit: int = 100,
-        start_epoch: Tuple[int, int, int] = (2015, 1, 1),
+        start_epoch: Tuple[int, int, int] = (2015, 1, 1)
     ):
         """
         Initializes a RedditCommentWebScrapper object.
@@ -27,7 +33,27 @@ class RedditCommentWebScraper:
 
         self._limit = limit
         self._start_epoch = int(dt.datetime(*start_epoch).timestamp())
-        self._api = PushshiftAPI()
+
+        # find .env automagically by walking up directories until it's found
+        dotenv_path = find_dotenv()
+
+        # load up the entries as environment variables
+        load_dotenv(dotenv_path)
+
+        client_id = os.environ.get("praw_client_id")
+        client_secret = os.environ.get("praw_client_secret")
+        redirect_uri = os.environ.get("praw_redirect_uri")
+        user_agent = os.environ.get("praw_user_agent")
+        refresh_token = os.environ.get("praw_refresh_token")
+
+        reddit = praw.Reddit(
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=redirect_uri,
+            user_agent=user_agent,
+            refresh_token=refresh_token,
+        )
+        self._api = PushshiftAPI(praw=reddit)
 
         self._comments = []
 
@@ -37,14 +63,23 @@ class RedditCommentWebScraper:
 
         :return: None
         """
+
+        def fxn(item):
+            return (
+                item["score"] > 1
+                and item["body"] != "[removed]"
+                and item["body"] != "[deleted]"
+                and len(item["body"]) > 25
+            )
+
         self._comments = list(
             self._api.search_comments(
                 after=self._start_epoch,
                 subreddit=self._subreddit,
-                filter=["subreddit", "body", "created_utc"],
+                filter=["subreddit", "body", "created_utc", "score"],
+                filter_fn=fxn,
                 limit=self._limit,
-                mem_safe=True,
-                nest_level=3,
+                mem_safe=True
             )
         )
 

@@ -12,3 +12,4 @@ python-dotenv>=0.5.1
 pmaw~=2.0.0
 setuptools~=57.0.0
 SQLAlchemy~=1.4.25
+praw~=7.4.0

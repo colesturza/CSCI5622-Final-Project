@@ -11,6 +11,7 @@ class Comment(Base):
     created_utc = Column(Integer, nullable=False)
     subreddit = Column(String, nullable=False)
     body = Column(String, nullable=False)
+    score = Column(Integer, nullable=False)
 
 
 # Create an engine that stores data in the local directory's
